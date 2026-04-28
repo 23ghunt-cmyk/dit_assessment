@@ -1,6 +1,8 @@
 # Variables
-error_message = "An error has occurred. Please try again"
+error_message = "An error has occurred. Please enter a valid input"
 wait_time = 0
+total = 0
+delivery_check = False
 
 # Functions
 def get_num(prompt):
@@ -20,20 +22,30 @@ def pick_up():
 
 def delivery():
      """not thing"""
-     delivery = "delivered"
+     delivery = True
+     customer_name = input("Name for Pick Up\n> ").lower()
      customer_address = input("Address for Dilivery\n> ").lower()
      customer_phone_number = get_num("Phone number\n> ")
      order()
 
 def order():
      """ok"""
-     print(pizza)
      while True:
+          # add list of items
           cart = input("Type 'Done' to finish ordering\nEnter order\n> ").lower()
           if cart == "done":
                break
           else:
                wait_time =+ 5
+               # add price
+     purchice = input(f"Your total is {total}\nWould you like to complete your order (Y/N)\n> ").lower() # fix spelling and print list of ordered items and their price
+     if purchice == "y" or purchice == "yes":
+          print(f"Name: {}")
+          # add purchiceing message including total cost and customer info and order type (deliver or pick up)
+     elif purchice == "n" or purchice == "no":
+          print("Order sucsessfully canceled") # check spelling
+     else:
+          [print(error_message)]
 
 
 
@@ -45,7 +57,7 @@ pizza = [
     {"name": "margherita pizza","small": 10,"medium": 20,"large": 30},
     {"name": "pepperoni pizza","small": 10,"medium": 20,"large": 30},
     {"name": "gravel pizza","small": 10,"medium": 20,"large": 30},
-    {"name": "baked bean pizza","small": 10,"medium": 20,"large": 30},
+    {"nam3e": "baked bean pizza","small": 10,"medium": 20,"large": 30},
     {"name": "sushi","small": 10,"medium": 20,"large": 30},
     {"name": "mayonnaise","small": 10,"medium n": 20,"large m": 30},
     {"name": "escalator","small": 10,"medium n": 20,"large m": 30},
@@ -66,3 +78,13 @@ while True:
 
         else:
              print(error_message)
+
+
+"""
+to add:
+finish ordering system
+add comments to all functions
+make the list viewable
+rework wait time
+add another function with a return value or other
+"""

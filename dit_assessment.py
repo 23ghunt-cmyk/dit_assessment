@@ -1,90 +1,124 @@
+"""This is a pizza ordering system that allows customers to place pick up or delivery orders."""
+
 # Variables
 error_message = "An error has occurred. Please enter a valid input"
-wait_time = 0
-total = 0
-delivery_check = False
+delivery_fee = 10  # Ask if these should be in all caps or not
+min_per_pizza = 15
+
+# 2D List of pizza options: [Name, Small, Medium, Large]
+pizza = [
+    ["alphabet soup pizza", 10, 20, 30],
+    ["hawian pizza", 10, 20, 30],
+    ["meat lovers pizza", 10, 20, 30],
+    ["margherita pizza", 10, 20, 30],
+    ["pepperoni pizza", 10, 20, 30],
+    ["gravel pizza", 10, 20, 30],
+    ["baked bean pizza", 10, 20, 30],
+    ["sushi", 10, 20, 30],
+    ["mayonnaise", 10, 20, 30],
+    ["escalator", 10, 20, 30],
+    ["chair", 10, 20, 30],
+    ["wood chunk", 10, 20, 30],
+]
+
 
 # Functions
-def get_num(prompt):
-    """other thing"""
+def get_num(prompt_num):
+    """Prompt user for a number and handle non integer input errors."""
     while True:
         try:
-            num = int(input(prompt))
+            num = int(input(prompt_num))
             return num
         except ValueError:
             print(error_message)
 
+
 def pick_up():
-    """thing"""
-    customer_name = input("Name for Pick Up\n> ").lower()
-    customer_phone_number = get_num("Phone number\n> ")
-    order()
+    """Gather customer details for a pick up order and start the ordering process."""
+    name = input("Name for Pick Up\n> ")
+    phone_number = get_num("Phone number (no spaces)\n> ")
+    order(name, "Pick Up", phone_number)
+
 
 def delivery():
-     """not thing"""
-     delivery = True
-     customer_name = input("Name for Pick Up\n> ").lower()
-     customer_address = input("Address for Dilivery\n> ").lower()
-     customer_phone_number = get_num("Phone number\n> ")
-     order()
-
-def order():
-     """ok"""
-     while True:
-          # add list of items
-          cart = input("Type 'Done' to finish ordering\nEnter order\n> ").lower()
-          if cart == "done":
-               break
-          else:
-               wait_time =+ 5
-               # add price
-     purchice = input(f"Your total is {total}\nWould you like to complete your order (Y/N)\n> ").lower() # fix spelling and print list of ordered items and their price
-     if purchice == "y" or purchice == "yes":
-          print(f"Name: {}")
-          # add purchiceing message including total cost and customer info and order type (deliver or pick up)
-     elif purchice == "n" or purchice == "no":
-          print("Order sucsessfully canceled") # check spelling
-     else:
-          [print(error_message)]
+    """Gather customer details for a delivery order and start the ordering process."""
+    name = input("Name for Delivery\n> ")
+    address = input("Address for Delivery\n> ")
+    phone_number = get_num("Phone number (no spaces)\n> ")
+    order(name, "Delivery", phone_number, address)
 
 
+def order(customer_name, order_type, phone, address="N/A"):
+    """Manage the main pizza ordering loop, cart management, and receipt generation."""
+    # Variables for order (not at top so they reset for each order)
+    cart = []
+    total = 0
+    wait_time = 0
 
-# List of pizza options
-pizza = [
-    {"name": "alphabet soup pizza","small": 10,"medium": 20,"large": 30},
-    {"name": "hawian pizza","small": 10,"medium": 20,"large": 30},
-    {"name": "meat lovers pizza","small": 10,"medium": 20,"large": 30},
-    {"name": "margherita pizza","small": 10,"medium": 20,"large": 30},
-    {"name": "pepperoni pizza","small": 10,"medium": 20,"large": 30},
-    {"name": "gravel pizza","small": 10,"medium": 20,"large": 30},
-    {"nam3e": "baked bean pizza","small": 10,"medium": 20,"large": 30},
-    {"name": "sushi","small": 10,"medium": 20,"large": 30},
-    {"name": "mayonnaise","small": 10,"medium n": 20,"large m": 30},
-    {"name": "escalator","small": 10,"medium n": 20,"large m": 30},
-    {"name": "chair","small": 10,"medium n": 20,"large m": 30},
-    {"name": "wood chunk","small": 10,"medium n": 20,"large m": 30},
-]
+    while True:
+        for item in pizza:
+            print(f"{item[0]} | Small: ${item[1]} | Medium: ${item[2]} | Large: ${item[3]}")
+        choice = input("Enter pizza name (or type 'done' to finish)\n> ").lower().strip()
+        if choice == "done":
+            break
+
+        found_pizza = None
+        for item in pizza:
+            if item[0] == choice:
+                found_pizza = item
+                break
+
+        if found_pizza:
+            size = input("What size? (small/medium/large)\n> ").lower()
+            if size == "small" or size == "medium" or size == "large":
+                if size == "small":
+                    price = found_pizza[1]
+                elif size == "medium":
+                    price = found_pizza[2]
+                elif size == "large":
+                    price = found_pizza[3]
+
+                total += price
+                wait_time += min_per_pizza
+                cart.append(f"{size} {choice}")
+                print(f"Added {size} {choice}. Total: ${total}")
+            else:
+                print("Invalid size. Please try again.")
+        else:
+            print("That item is not on the menu.")
+
+    if not cart:
+        print("Cart is empty. Order cancelled")
+        return
+
+    print(f"Your total is ${total}")
+
+    # Receipt and confirmation
+    while True:
+        break
+
+
 
 # Menu
 while True:
-        reception = input("1) Pick Up\n2) Delivery\n> ").lower()
-        if reception == "1" or reception == "pickup" or reception == "pick up":
-            print("Pick Up selcected")
-            pick_up()
+    reception = input("1) Pick Up\n2) Delivery\n> ").lower()
+    if reception == "1" or reception == "pickup" or reception == "pick up":
+        print("Pick Up selected")
+        pick_up()
 
-        elif reception == "2" or reception == "delivery":
-            print("Delivery selected")
-            delivery()
+    elif reception == "2" or reception == "delivery":
+        print("Delivery selected")
+        delivery()
 
-        else:
-             print(error_message)
+    else:
+        print(error_message)
 
-
+# keep new line at end of file
 """
 to add:
-finish ordering system
-add comments to all functions
-make the list viewable
-rework wait time
-add another function with a return value or other
+make list print so users can see what they can order
+add .sleep's
+record testing video (remember to test negative cases)
+add .strip() to phone number input
+read comment on line 5
 """

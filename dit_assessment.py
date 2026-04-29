@@ -95,21 +95,16 @@ def order(customer_name, order_type, phone, address="N/A"):
 
     # Receipt and confirmation
     while True:
-
         confirm = input("Would you like to complete your order? (Y/N)\n> ")
         if confirm == "y" or confirm == "yes":
             print(f"Final receipt:\nName: {customer_name}\nType: {order_type}")
-
             if order_type == "delivery":
                 print(f"Address: {address}")
-
             print(f"Order: {', '.join(cart)}\nTotal: ${total + DELIVERY_FEE if order_type == 'delivery' else total}\nWait time: {wait_time} mins")
             break
-
-        elif confirm == "n" or confirm == "no":
+        elif confirm == "n" or confirm == "no": 
             print("Order successfully canceled.")
             break
-
         else:
             print(ERROR_MESSAGE)
 

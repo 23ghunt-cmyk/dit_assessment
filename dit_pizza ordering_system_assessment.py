@@ -1,12 +1,17 @@
-"""This is a pizza ordering system that allows customers to place pick up or delivery orders."""
+"""This is a pizza ordering system that allows customers to place pick up or deliver orders."""
+
+# Imports
+import os
+import time
 
 # Variables
 ERROR_MESSAGE = "An error has occurred. Please enter a valid input"
 DELIVERY_FEE = 10
 MIN_PER_PIZZA = 15
+LINE_WIDTH = 50
 
 # List of pizza options:(Name, Small, Medium, Large)
-pizza = [
+PIZZA_MENU = [
     ["alphabet soup pizza", 10, 20, 30],
     ["hawian pizza", 10, 20, 30],
     ["meat lovers pizza", 10, 20, 30],
@@ -23,6 +28,19 @@ pizza = [
 
 
 # Functions
+def clear_screen():
+    """Clear the terminal screen after a short delay."""
+    time.sleep(0.9)
+    os.system('cls')
+
+
+def print_header(title):
+    """Print a header."""
+    print("\n" + "=" * LINE_WIDTH)
+    print(f"{title.upper().center(LINE_WIDTH)}")
+    print("=" * LINE_WIDTH)
+
+
 def get_num(prompt_num):
     """Prompt user for a number and handle non integer input errors."""
     while True:
@@ -35,20 +53,24 @@ def get_num(prompt_num):
 
 def pick_up():
     """Gather customer details for a pick up order and start the ordering process."""
+    clear_screen()
+    print_header("Pick Up Details")
     name = input("Name for Pick Up\n> ")
-    phone_number = get_num("Phone number\n> ")
-    order(name, "pick up", phone_number)
+    phone_number = get_num("Phone number (no spaces)\n> ")
+    process_order(name, "pick up", phone_number)
 
 
 def delivery():
     """Gather customer details for a delivery order and start the ordering process."""
+    clear_screen()
+    print_header("Delivery Details")
     name = input("Name for Delivery\n> ")
     address = input("Address for Delivery\n> ")
     phone_number = get_num("Phone number\n> ")
-    order(name, "delivery", phone_number, address)
+    process_order(name, "delivery", phone_number, address)
 
 
-def order(customer_name, order_type, phone, address="N/A"):
+def process_order(customer_name, order_type, phone, address="N/A"):
     """Manage the main pizza ordering loop, cart management, and receipt generation."""
     # Variables for order (not at top so they reset for each order)
     cart = []
@@ -56,14 +78,17 @@ def order(customer_name, order_type, phone, address="N/A"):
     wait_time = 0
 
     while True:
-        for item in pizza:
+        clear_screen()
+        print_header("Menu")
+        for item in PIZZA_MENU:
             print(f"{item[0]} | Small: ${item[1]} | Medium: ${item[2]} | Large: ${item[3]}")
-        choice = input("Enter pizza name (or type 'done' to finish)\n> ").lower().strip()
+        choice = input("Enter pizza name (type 'done' to finish)\n> ").lower().strip()
         if choice == "done":
+            clear_screen()
             break
 
         found_pizza = None
-        for item in pizza:
+        for item in PIZZA_MENU:
             if item[0] == choice:
                 found_pizza = item
                 break
@@ -91,18 +116,27 @@ def order(customer_name, order_type, phone, address="N/A"):
         print("Cart is empty. Order cancelled")
         return
 
-    print(f"Your total is ${total + DELIVERY_FEE if order_type == 'delivery' else total}")
+    final_total = total + DELIVERY_FEE if order_type == "delivery" else total
+    print_header("Order Summary")
+    for item in cart:
+        print(f"- {item}")
+    if order_type == "Delivery":
+        print(f"- Delivery Fee: ${DELIVERY_FEE}")
+    print(f"\nTotal to pay: ${final_total}")
 
     # Receipt and confirmation
     while True:
         confirm = input("Would you like to complete your order? (Y/N)\n> ")
         if confirm == "y" or confirm == "yes":
-            print(f"Final receipt:\nName: {customer_name}\nType: {order_type}")
+            clear_screen()
+            print_header("Receipt")
+            print(f"Customer name: {customer_name}\nPhone number: {phone}\nOrder type: {order_type}")
             if order_type == "delivery":
                 print(f"Address: {address}")
-            print(f"Order: {', '.join(cart)}\nTotal: ${total + DELIVERY_FEE if order_type == 'delivery' else total}\nWait time: {wait_time} mins")
+            print(f"Order: {', '.join(cart)}\nTotal: ${final_total}\nWait time: {wait_time} mins")
             break
-        elif confirm == "n" or confirm == "no": 
+        elif confirm == "n" or confirm == "no":
+            clear_screen()
             print("Order successfully canceled.")
             break
         else:
@@ -111,6 +145,7 @@ def order(customer_name, order_type, phone, address="N/A"):
 
 # Menu
 while True:
+    print_header("Pizza Ordering System")
     reception = input("1) Pick Up\n2) Delivery\n> ").lower()
     if reception == "1" or reception == "pickup" or reception == "pick up":
         print("Pick Up selected")
@@ -122,16 +157,3 @@ while True:
 
     else:
         print(ERROR_MESSAGE)
-
-# keep new line at end of file
-"""
-to add:
-record testing video (remember to test negative cases) (talk during the video)
-add .strip() to phone number input (not nessasary)
-make the user interface look nicer and .sleep's
-redo varible names
-add ablity to remove items from cart
-change file and / repo name
-change project discription
-change key spesifications
-"""

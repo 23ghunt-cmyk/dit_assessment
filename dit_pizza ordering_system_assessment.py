@@ -19,11 +19,11 @@ PIZZA_MENU = [
     ["pepperoni pizza", 10, 20, 30],
     ["gravel pizza", 10, 20, 30],
     ["baked bean pizza", 10, 20, 30],
-    ["sushi", 10, 20, 30],
-    ["mayonnaise", 10, 20, 30],
-    ["escalator", 10, 20, 30],
-    ["chair", 10, 20, 30],
-    ["wood chunk", 10, 20, 30],
+    ["sushi pizza", 10, 20, 30],
+    ["mayonnaise pizza", 10, 20, 30],
+    ["escalator pizza", 10, 20, 30],
+    ["chair pizza", 10, 20, 30],
+    ["wood chunk pizza", 10, 20, 30],
 ]
 
 
@@ -55,7 +55,12 @@ def pick_up():
     """Gather customer details for a pick up order and start the ordering process."""
     clear_screen()
     print_header("Pick Up Details")
-    name = input("Name for Pick Up\n> ")
+    while True:
+        name = input("Name for Pick Up\n> ")
+        if name.strip():
+            break
+        else:
+            print(ERROR_MESSAGE)
     phone_number = get_num("Phone number (no spaces)\n> ")
     process_order(name, "pick up", phone_number)
 
@@ -64,8 +69,18 @@ def delivery():
     """Gather customer details for a delivery order and start the ordering process."""
     clear_screen()
     print_header("Delivery Details")
-    name = input("Name for Delivery\n> ")
-    address = input("Address for Delivery\n> ")
+    while True:
+        name = input("Name for Delivery\n> ")
+        if name.strip():
+            break
+        else:
+            print(ERROR_MESSAGE)
+    while True:
+        address = input("Address for Delivery\n> ")
+        if address.strip():
+            break
+        else:
+            print(ERROR_MESSAGE)
     phone_number = get_num("Phone number\n> ")
     process_order(name, "delivery", phone_number, address)
 
@@ -82,19 +97,21 @@ def process_order(customer_name, order_type, phone, address="N/A"):
         print_header("Menu")
         for item in PIZZA_MENU:
             print(f"{item[0]} | Small: ${item[1]} | Medium: ${item[2]} | Large: ${item[3]}")
+
         choice = input("Enter pizza name (type 'done' to finish)\n> ").lower().strip()
+
         if choice == "done":
             clear_screen()
             break
 
         found_pizza = None
         for item in PIZZA_MENU:
-            if item[0] == choice:
+            if item[0].lower().strip() == choice:
                 found_pizza = item
                 break
 
         if found_pizza:
-            size = input("What size? (small/medium/large)\n> ").lower()
+            size = input("What size? (small/medium/large)\n> ").lower().strip()
             if size == "small" or size == "medium" or size == "large":
                 if size == "small":
                     price = found_pizza[1]
@@ -120,7 +137,7 @@ def process_order(customer_name, order_type, phone, address="N/A"):
     print_header("Order Summary")
     for item in cart:
         print(f"- {item}")
-    if order_type == "Delivery":
+    if order_type == "delivery":
         print(f"- Delivery Fee: ${DELIVERY_FEE}")
     print(f"\nTotal to pay: ${final_total}")
 
